@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="msg" class="java.lang.String">
+        <constructor-arg value="Bean Message"/>
+    </bean>
+
+
+    <bean id="provider" class="com.efimchick.springtutorial.core.it7.springconstructordi.CustomStringMessageProvider">
+        <constructor-arg index="0" ref="msg"/>
+        <constructor-arg value="4"/>
+        <constructor-arg value="true"/>
+        <constructor-arg type="char" value="!"/>
+    </bean>
+
+    <bean id="sender" class="com.efimchick.springtutorial.core.it7.springconstructordi.SystemOutMessageSender">
+    </bean>
+
+</beans>

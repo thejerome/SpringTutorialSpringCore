@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="msg" class="java.lang.String">
+        <constructor-arg value="warning"/>
+    </bean>
+
+    <util:list id="providers" list-class="java.util.ArrayList"
+               value-type="com.efimchick.springtutorial.core.it8.springcollections.MessageProvider">
+
+        <bean class="com.efimchick.springtutorial.core.it8.springcollections.CustomStringMessageProvider">
+            <constructor-arg index="0" ref="msg"/>
+            <constructor-arg index="1" value="1"/>
+            <constructor-arg index="2" value="true"/>
+            <constructor-arg type="char" value="!"/>
+        </bean>
+
+        <bean class="com.efimchick.springtutorial.core.it8.springcollections.CustomStringMessageProvider">
+            <constructor-arg index="0" value="error"/>
+            <constructor-arg index="1" value="2"/>
+            <constructor-arg index="2" value="true"/>
+            <constructor-arg type="char" value="!"/>
+        </bean>
+
+    </util:list>
+
+    <util:map id="senders"
+              map-class="java.util.HashMap"
+              key-type="java.lang.String"
+              value-type="com.efimchick.springtutorial.core.it8.springcollections.MessageSender">
+        <entry key="warn">
+            <bean class="com.efimchick.springtutorial.core.it8.springcollections.SystemOutMessageSender"/>
+        </entry>
+        <entry key="error" value-ref="fileSender"/>
+    </util:map>
+
+    <bean id="provider" class="com.efimchick.springtutorial.core.it8.springcollections.CombinedMessageProvider">
+        <constructor-arg>
+            <ref bean="providers"/>
+        </constructor-arg>
+        <constructor-arg>
+            <value>,</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="fileSender" class="com.efimchick.springtutorial.core.it8.springcollections.OutputFileMessageSender">
+        <property name="filename" value="log.log"/>
+    </bean>
+
+    <bean id="sender" class="com.efimchick.springtutorial.core.it8.springcollections.CombinedMessageSender">
+        <constructor-arg>
+            <ref bean="senders"/>
+        </constructor-arg>
+    </bean>
+
+</beans>
