@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--Candidates-->
+    <bean id="biden" class="com.efimchick.springtutorial.core.zz.lives.elections.Candidate">
+        <constructor-arg index="0" value="Biden"/>
+        <constructor-arg index="1" value="DEM"/>
+    </bean>
+
+    <bean id="trump" class="com.efimchick.springtutorial.core.zz.lives.elections.Candidate">
+        <constructor-arg index="0" value="Trump"/>
+        <constructor-arg index="1" value="RES"/>
+    </bean>
+
+    <bean id="kanye" class="com.efimchick.springtutorial.core.zz.lives.elections.Candidate">
+        <constructor-arg index="0" value="Kanye West"/>
+        <constructor-arg index="1">
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="ross" class="com.efimchick.springtutorial.core.zz.lives.elections.Candidate">
+        <constructor-arg index="0" value="Ross Perro"/>
+        <constructor-arg index="1">
+            <null/>
+        </constructor-arg>
+    </bean>
+
+
+    <!--Policies-->
+    <bean id="loyalDemPolicy" class="com.efimchick.springtutorial.core.zz.lives.elections.LoyalElectionPolicy">
+        <property name="party" value="DEM"/>
+    </bean>
+    <bean id="loyalResPolicy" class="com.efimchick.springtutorial.core.zz.lives.elections.LoyalElectionPolicy">
+        <property name="party" value="RES"/>
+    </bean>
+    <bean id="notSoLoyalResPolicy" class="com.efimchick.springtutorial.core.zz.lives.elections.NotSoLoyalElectionPolicy">
+        <constructor-arg index="0" value="RES"/>
+        <constructor-arg index="1" value="0.7"/>
+    </bean>
+    <bean scope="prototype" id="resNoTrumpPolicy" class="com.efimchick.springtutorial.core.zz.lives.elections.NotThisOneElectionPolicy">
+        <constructor-arg name="defaultPolicy" ref="loyalResPolicy"/>
+        <constructor-arg name="fallbackPolicy" ref="loyalDemPolicy"/>
+        <constructor-arg name="banned" ref="trump"/>
+    </bean>
+
+    <util:map id="bindings"
+              key-type="com.efimchick.springtutorial.core.zz.lives.elections.ElectionPolicy"
+              value-type="java.util.Set">
+        <entry key-ref="loyalDemPolicy">
+            <set>
+                <value type="java.lang.String">CA</value>
+                <value type="java.lang.String">CN</value>
+                <value type="java.lang.String">OR</value>
+            </set>
+        </entry>
+        <entry key-ref="loyalResPolicy">
+            <set>
+                <value type="java.lang.String">TX</value>
+                <value type="java.lang.String">WM</value>
+                <value type="java.lang.String">CL</value>
+            </set>
+        </entry>
+        <entry key-ref="notSoLoyalResPolicy">
+            <set>
+                <value type="java.lang.String">FL</value>
+            </set>
+        </entry>
+        <entry key-ref="resNoTrumpPolicy">
+            <set>
+                <value type="java.lang.String">OH</value>
+            </set>
+        </entry>
+    </util:map>
+
+
+</beans>
